@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+	
+<!-- 	<bean id="socketIOScheduleHealth" class="com.cmsz.pbossvisual.index.schedule.SocketIOScheduleHealth"/>
+	<bean id="socketIOSchedulePerformance" class="com.cmsz.pbossvisual.index.schedule.SocketIOSchedulePerformance" />
+	<bean id="successRateSchedule" class="com.cmsz.pbossvisual.index.schedule.SocketIOSuccessRateSchedule"/>
+    <bean id="tradingVolumeSchedule" class="com.cmsz.pbossvisual.index.schedule.SocketIOTradingVolumeSchedule"/>
+	<bean id="socketIOScheduleMainMap" class="com.cmsz.pbossvisual.index.schedule.SocketIOScheduleMainMap" /> -->
+	<!-- <bean id="quatz" class="com.cmsz.demon.index.schedule.Quatz" /> -->
+	<bean id="socketio" class="com.cmsz.demon.index.schedule.Socketio" />
+
+<!-- 	<bean id="quatzData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+		<property name="targetObject"> <ref local="quatz" /> </property> 
+			<property name="targetMethod">
+			 要执行的方法名称 
+			<value>push</value> 
+		</property> 
+		<property name="concurrent" value="true" /> 
+	</bean>
+	
+	<bean id="quatzCronDate" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+		<property name="jobDetail">
+		    <ref bean="quatzData" /> 
+		</property> 
+		<property name="cronExpression"> 
+		    <value>0/10 * * * * ?</value> 
+		</property> 
+	</bean>
+	
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="quatzCronDate" />
+			</list>
+		</property>
+	</bean> -->
+		<bean id="socketioData" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+		<property name="targetObject"> <ref local="socketio" /> </property> 
+			<property name="targetMethod">
+			<!--  要执行的方法名称  -->
+			<value>push</value> 
+		</property> 
+		<property name="concurrent" value="true" /> 
+	</bean>
+	
+	<bean id="socketioCronDate" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+		<property name="jobDetail">
+		    <ref bean="socketioData" /> 
+		</property> 
+		<property name="cronExpression"> 
+		    <value>0/10 * * * * ?</value> 
+		</property> 
+	</bean>
+	
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="socketioCronDate" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!--PBOSS首页健康度
+	健康度定义目标bean和bean中的方法
+	<bean id="socketioJobHealth" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"> 
+		<property name="targetObject"> <ref local="socketIOScheduleHealth" /> </property> 
+			<property name="targetMethod">
+			 要执行的方法名称 
+			<value>execute</value> 
+		</property> 
+		<property name="concurrent" value="true" /> 
+		
+	</bean>
+
+	健康度定义触发的时间
+	<bean id="socketioCronHealth" class="org.springframework.scheduling.quartz.CronTriggerBean"> 
+		<property name="jobDetail">
+		    <ref bean="socketioJobHealth" /> 
+		</property> 
+		<property name="cronExpression"> 
+		    <value>0/5 * * * * ?</value> 
+		</property> 
+	</bean>
+
+	健康度管理触发器
+	<bean autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+		<property name="triggers">
+		   <list> <ref local="socketioCronHealth" /> </list> 
+		</property> 
+	</bean>
+		
+	迭代一首页性能指标
+	性能指标定义目标bean和bean中的方法
+	<bean id="socketioJobPerformance"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref local="socketIOSchedulePerformance" />
+		</property>
+		<property name="targetMethod">
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="true" />
+	</bean>
+
+	性能指标定义触发的时间
+	<bean id="socketioCronPerformance" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="socketioJobPerformance" />
+		</property>
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+
+	性能指标管理触发器
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="socketioCronPerformance" />
+			</list>
+		</property>
+	</bean>
+		
+	indexMainMap定义目标bean和bean中的方法
+	<bean id="indexMainMapSocketioJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="socketIOScheduleMainMap" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="true" />
+	</bean>
+
+
+	indexMainMap定义触发的时间
+	<bean id="indexMainMapSocketioCron" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="indexMainMapSocketioJob" />
+		<property name="cronExpression">
+			<value>0/5 * * * * ?</value>
+		</property>
+	</bean>
+
+	indexMainMap管理触发器
+	<bean autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="indexMainMapSocketioCron" />
+			</list>
+		</property>
+	</bean>
+	
+	首页成功率定义目标bean和bean中的方法
+	<bean id="successSocketioJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref local="successRateSchedule" />
+		</property>
+		<property name="targetMethod">
+			要执行的方法名称
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="true" />
+	</bean>
+
+
+	首页成功率定义触发的时间
+	<bean id="successSocketioCron" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="successSocketioJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0 1/10 * * * ?</value>
+		</property>
+	</bean>
+
+	首页成功率定义管理触发器
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="successSocketioCron" />
+			</list>
+		</property>
+	</bean>
+	
+	首页交易量定时器
+	<bean id="tradingVolumeSocketioJob"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref local="tradingVolumeSchedule" />
+		</property>
+		<property name="targetMethod">
+			要执行的方法名称
+			<value>execute</value>
+		</property>
+		<property name="concurrent" value="true" />
+	</bean>
+	
+	<bean id="tradingVolumeSocketioCron" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="tradingVolumeSocketioJob" />
+		</property>
+		<property name="cronExpression">
+			<value>59 0/10 * * * ?</value>
+			<value>0 1/10 * * * ?</value>
+		</property>
+	</bean>
+	
+	<bean autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="tradingVolumeSocketioCron" />
+			</list>
+		</property>
+	</bean> -->
+	
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cmsz.demon.index.dao.QueryLagouUser">
+	<resultMap id="lagouUseMap" type="com.cmsz.demon.index.model.LagouUser">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="passwd" property="passwd" jdbcType="VARCHAR" />
+		<result column="mobilephone" property="mobilephone" jdbcType="INTEGER" />
+		<result column="is_avaliable" property="is_avaliable" jdbcType="INTEGER" />
+	</resultMap>
+<!-- 	<sql id="queryLagouUserWhere">
+		<where>
+			<if test="criteria != null">
+				<if test="criteria.startDate != null">
+					and str_to_date(collect_time,'%Y%m%d%H%i%s') &gt;=
+					str_to_date('${criteria.startDate}','%Y-%m-%d %H:%i:%s')
+				</if>
+				<if test="criteria.endDate != null">
+					and str_to_date(collect_time,'%Y%m%d%H%i%s') &lt;
+					str_to_date('${criteria.endDate}','%Y-%m-%d %H:%i:%s')
+				</if>
+			</if>		
+		</where>
+	</sql> -->
+	
+	<select id="queryLagouUser" resultMap="lagouUseMap">
+	SELECT id,name,passwd,mobilephone,is_avaliable from user 
+	</select>
+
+	</mapper>
+	
